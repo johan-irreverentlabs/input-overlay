@@ -20,6 +20,7 @@
 #include "../../sources/input_source.hpp"
 #include "SDL.h"
 #include <keycodes.h>
+#include "util/log.h"
 
 void element_analog_stick::load(const QJsonObject &obj)
 {
@@ -46,4 +47,43 @@ void element_analog_stick::draw(gs_effect_t *effect, gs_image_file_t *image, sou
         }
     }
     element_texture::draw(effect, image, temp, &pos);
+}
+
+void element_analog_stick::tick(float, sources::overlay_settings *settings)
+{
+    float fx = 0;
+    float fy = 0;
+    if (settings->gamepad || settings->remote_input_data) {
+        if (m_side == element_side::LEFT) {
+            fx = settings->pad_axis(SDL_CONTROLLER_AXIS_LEFTX);
+            fy = settings->pad_axis(SDL_CONTROLLER_AXIS_LEFTY);
+        } else {
+            fx = settings->pad_axis(SDL_CONTROLLER_AXIS_RIGHTX);
+            fy = settings->pad_axis(SDL_CONTROLLER_AXIS_RIGHTY);
+        }
+    }
+    int x = 0;
+    int y = 0;
+    if (fx > 0.5) {
+        x = 1;
+    } else if (fx < -0.5) {
+        x = -1;
+    }
+
+    if (fy > 0.5) {
+        y = 1;
+    } else if (fy < -0.5) {
+        y = -1;
+    }
+
+    if (x != m_last_x) {
+        binput_event("%s X:%d", m_side == element_side::LEFT ? "Left" : "Right", x);
+    }
+
+    if (y != m_last_y) {
+        binput_event("%s Y:%d", m_side == element_side::LEFT ? "Left" : "Right", y);
+    }
+
+    m_last_x = x;
+    m_last_y = y;
 }

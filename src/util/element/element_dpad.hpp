@@ -27,6 +27,7 @@ public:
     void load(const QJsonObject &obj) override;
 
     void draw(gs_effect_t *effect, gs_image_file_t *image, sources::overlay_settings *settings) override;
+    void tick(float seconds, sources::overlay_settings *settings) override;
 
     enum {
         TEXTURE_LEFT,
@@ -42,4 +43,5 @@ public:
 private:
     /* Center is in m_mapping */
     gs_rect m_mappings[8]; /* Left, Right, Up, Down, Top Left, Top Right, Bottom Left, Bottom Right */
+    int m_last_dir = -1;
 };

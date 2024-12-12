@@ -37,11 +37,13 @@ public:
     void load(const QJsonObject &obj) override;
 
     void draw(gs_effect_t *effect, gs_image_file_t *image, sources::overlay_settings *settings) override;
-
+    void tick(float seconds, sources::overlay_settings *settings) override;
 private:
     void calc_position(vec2 &v);
 
     gs_rect m_pressed{};
     element_side m_side;
     int32_t m_radius = 0;
+    int m_last_x = 0, m_last_y = 0;
+    
 };

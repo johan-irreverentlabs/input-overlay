@@ -20,6 +20,7 @@
 #include "element_dpad.hpp"
 #include <keycodes.h>
 #include "SDL.h"
+#include "util/log.h"
 
 element_dpad::element_dpad() : element_texture(ET_DPAD_STICK) {}
 
@@ -78,4 +79,15 @@ void element_dpad::draw(gs_effect_t *effect, gs_image_file_t *image, sources::ov
     } else {
         element_texture::draw(effect, image, nullptr);
     }
+}
+
+void element_dpad::tick(float, sources::overlay_settings *settings)
+{
+    auto dir = 0;
+    if (settings->gamepad)
+        dir = get_direction(settings->get_button_map()); 
+    if (m_last_dir != dir) {
+        binput_event("DPad: %d", dir);
+    }
+    m_last_dir = dir;
 }

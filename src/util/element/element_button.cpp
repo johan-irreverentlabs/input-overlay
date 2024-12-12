@@ -20,6 +20,11 @@
 
 #include "hook/uiohook_helper.hpp"
 #include "sources/input_source.hpp"
+#include "util/log.h"
+#include <obs-module.h> 
+#include <obs-frontend-api.h> 
+#include <obs.hpp>
+
 
 void element_button::load(const QJsonObject &obj)
 {
@@ -37,6 +42,15 @@ void element_keyboard_key::draw(gs_effect_t *effect, gs_image_file_t *image, sou
         element_button::draw(effect, image, nullptr);
 }
 
+void element_keyboard_key::tick(float, sources::overlay_settings *settings)
+{
+    bool is_pressed = settings->is_pad_button_pressed(m_keycode);
+    if (is_pressed != m_last_pressed) {
+        binput_event("Key %s:%d", is_pressed ? "pressed" : "released", m_keycode);
+    }
+    m_last_pressed = is_pressed;
+}
+
 void element_mouse_button::load(const QJsonObject &obj)
 {
     element_button::load(obj);
@@ -51,10 +65,30 @@ void element_mouse_button::draw(gs_effect_t *effect, gs_image_file_t *image, sou
         element_button::draw(effect, image, nullptr);
 }
 
+void element_mouse_button::tick(float, sources::overlay_settings *settings)
+{
+    bool is_pressed = settings->data.mouse[m_keycode];
+    if (is_pressed != m_last_pressed) {
+
+        binput_event("Mouse %s:%d", is_pressed ? "pressed" : "released", m_keycode);
+    }
+    m_last_pressed = is_pressed;
+}
+
+
 void element_gamepad_button::draw(gs_effect_t *effect, gs_image_file_t *image, sources::overlay_settings *settings)
 {
     if (settings->is_pad_button_pressed(m_keycode))
         element_texture::draw(effect, image, &m_pressed);
     else
         element_button::draw(effect, image, nullptr);
+}
+
+void element_gamepad_button::tick(float, sources::overlay_settings *settings)
+{
+    bool is_pressed = settings->is_pad_button_pressed(m_keycode);
+    if (is_pressed != m_last_pressed) {
+        binput_event("Button %s:%d", is_pressed ? "pressed" : "released", m_keycode);
+    }
+    m_last_pressed = is_pressed;
 }

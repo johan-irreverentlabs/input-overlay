@@ -15,3 +15,12 @@ input-overlay depends on [libuiohook](https://github.com/kwhat/libuiohook) by [k
 - [OBS resource page](https://obsproject.com/forum/resources/input-overlay.552/)
 - [Config creation tool](https://univrsal.github.io/input-overlay/cct/)
 - [Convert old *.ini presets to JSON (WIP)](https://univrsal.github.io/input-overlay/converter/)
+
+## Building from source
+- Install Visual Studio 17 2022
+- Install CMake
+``` 
+cmake --preset windows-x64 
+cmake --build --preset windows-x64
+```
+

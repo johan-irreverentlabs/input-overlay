@@ -19,9 +19,19 @@
 #pragma once
 #include <obs-module.h>
 
-#define write_log(log_level, format, ...) blog(log_level, "[input-overlay] " format, ##__VA_ARGS__)
+extern int recording_time_ms();
 
+#define write_log(log_level, format, ...) blog(log_level, "[input-overlay] " format, ##__VA_ARGS__)
+#define write_input_event(log_level, format, ...) blog(log_level, "[input-event] " format, ##__VA_ARGS__)
+#define write_timed_input_event(format, ...) blog(log_level, "[input-event] " format, ##__VA_ARGS__)
 #define bdebug(format, ...) write_log(LOG_DEBUG, format, ##__VA_ARGS__)
 #define binfo(format, ...) write_log(LOG_INFO, format, ##__VA_ARGS__)
+#define binput_event(format, ...) \
+    do { \
+        int recording_time = recording_time_ms(); \
+        if (recording_time > 0) { \
+            blog(LOG_INFO, "[input-event](%d) " format, recording_time, ##__VA_ARGS__); \
+        } \
+    } while (0)
 #define bwarn(format, ...) write_log(LOG_WARNING, format, ##__VA_ARGS__)
 #define berr(format, ...) write_log(LOG_ERROR, format, ##__VA_ARGS__)

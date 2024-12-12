@@ -44,6 +44,42 @@ extern void cleanupDisplay();
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE("input-overlay", "en-US")
 
+int64_t g_record_start_time = -1;
+
+int recording_time_ms() {
+    if (g_record_start_time == -1)
+        return -1;
+    int64_t elapsed = os_gettime_ns() - g_record_start_time;
+    return elapsed / 1000000;
+}
+
+void on_recording_started(void*)
+{
+    binfo("Recording started");
+    g_record_start_time = os_gettime_ns();
+}
+
+void on_recording_stopped(void*)
+{
+    binfo("Recording stopped");
+    g_record_start_time = -1;
+}
+
+void register_callbacks()
+{
+    g_record_start_time = -1;
+
+    obs_frontend_add_event_callback([](obs_frontend_event event, void*) {
+        if (event == OBS_FRONTEND_EVENT_RECORDING_STARTED) {
+            on_recording_started(nullptr);
+        }
+        else if (event == OBS_FRONTEND_EVENT_RECORDING_STOPPED) {
+            on_recording_stopped(nullptr);
+        }
+    }, nullptr);
+}
+
+
 bool obs_module_load()
 {
     binfo("Loading v%s-%s (%s) build time %s", PLUGIN_VERSION, GIT_BRANCH, GIT_COMMIT_HASH, BUILD_TIME);
@@ -79,6 +115,8 @@ bool obs_module_load()
         const auto menu_cb = [] { settings_dialog->toggleShowHide(); };
         QAction::connect(menu_action, &QAction::triggered, menu_cb);
     });
+
+    register_callbacks();
     return true;
 }
 

@@ -40,6 +40,9 @@ public:
     element_keyboard_key() : element_button(ET_KEYBOARD_KEY) {}
 
     void draw(gs_effect_t *effect, gs_image_file_t *image, sources::overlay_settings *settings) override;
+    void tick(float seconds, sources::overlay_settings *settings) override;
+private:
+    bool m_last_pressed = false;
 };
 
 class element_mouse_button : public element_button {
@@ -48,6 +51,9 @@ public:
 
     void load(const QJsonObject &objc) override;
     void draw(gs_effect_t *effect, gs_image_file_t *image, sources::overlay_settings *settings) override;
+    void tick(float seconds, sources::overlay_settings *settings) override;
+private:
+    bool m_last_pressed = false;
 };
 
 class element_gamepad_button : public element_button {
@@ -55,4 +61,7 @@ public:
     element_gamepad_button() : element_button(ET_GAMEPAD_BUTTON) {}
 
     void draw(gs_effect_t *effect, gs_image_file_t *image, sources::overlay_settings *settings) override;
+    void tick(float seconds, sources::overlay_settings *settings) override;
+private:
+    bool m_last_pressed = false;
 };
