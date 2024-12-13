@@ -33,6 +33,7 @@ public:
 
 protected:
     gs_rect m_pressed;
+    QString m_id;
 };
 
 class element_keyboard_key : public element_button {

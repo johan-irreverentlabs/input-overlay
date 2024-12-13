@@ -87,7 +87,7 @@ void element_dpad::tick(float, sources::overlay_settings *settings)
     if (settings->gamepad)
         dir = get_direction(settings->get_button_map()); 
     if (m_last_dir != dir) {
-        binput_event("DPad: %d", dir);
+        binput_event("dpad: %d}", dir);
     }
     m_last_dir = dir;
 }

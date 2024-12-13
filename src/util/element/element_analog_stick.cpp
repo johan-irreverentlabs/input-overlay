@@ -77,11 +77,11 @@ void element_analog_stick::tick(float, sources::overlay_settings *settings)
     }
 
     if (x != m_last_x) {
-        binput_event("%s X:%d", m_side == element_side::LEFT ? "Left" : "Right", x);
+        binput_event("%s_stick_x: %d}", m_side == element_side::LEFT ? "left" : "right", x);
     }
 
     if (y != m_last_y) {
-        binput_event("%s Y:%d", m_side == element_side::LEFT ? "Left" : "Right", y);
+        binput_event("%s_stick_y: %d}", m_side == element_side::LEFT ? "left" : "right", y);
     }
 
     m_last_x = x;

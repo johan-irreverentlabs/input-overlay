@@ -30,6 +30,7 @@ void element_button::load(const QJsonObject &obj)
 {
     element_texture::load(obj);
     m_keycode = static_cast<uint16_t>(obj[CFG_KEY_CODE].toInt());
+    m_id = obj[CFG_ID].toString();
     m_pressed = m_mapping;
     m_pressed.y = m_mapping.y + m_mapping.cy + CFG_INNER_BORDER;
 }
@@ -44,9 +45,9 @@ void element_keyboard_key::draw(gs_effect_t *effect, gs_image_file_t *image, sou
 
 void element_keyboard_key::tick(float, sources::overlay_settings *settings)
 {
-    bool is_pressed = settings->is_pad_button_pressed(m_keycode);
+    bool is_pressed = settings->data.keyboard[m_keycode];
     if (is_pressed != m_last_pressed) {
-        binput_event("Key %s:%d", is_pressed ? "pressed" : "released", m_keycode);
+        binput_event("key_%s: %s}", is_pressed ? "pressed" : "released", m_id.toStdString().c_str());
     }
     m_last_pressed = is_pressed;
 }
@@ -70,7 +71,7 @@ void element_mouse_button::tick(float, sources::overlay_settings *settings)
     bool is_pressed = settings->data.mouse[m_keycode];
     if (is_pressed != m_last_pressed) {
 
-        binput_event("Mouse %s:%d", is_pressed ? "pressed" : "released", m_keycode);
+        binput_event("mouse_%s: %d}", is_pressed ? "pressed" : "released", m_keycode);
     }
     m_last_pressed = is_pressed;
 }
@@ -88,7 +89,7 @@ void element_gamepad_button::tick(float, sources::overlay_settings *settings)
 {
     bool is_pressed = settings->is_pad_button_pressed(m_keycode);
     if (is_pressed != m_last_pressed) {
-        binput_event("Button %s:%d", is_pressed ? "pressed" : "released", m_keycode);
+        binput_event("button_%s: %d}", is_pressed ? "pressed" : "released", m_keycode);
     }
     m_last_pressed = is_pressed;
 }

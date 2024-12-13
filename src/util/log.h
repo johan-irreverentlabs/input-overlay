@@ -30,7 +30,7 @@ extern int recording_time_ms();
     do { \
         int recording_time = recording_time_ms(); \
         if (recording_time > 0) { \
-            blog(LOG_INFO, "[input-event](%d) " format, recording_time, ##__VA_ARGS__); \
+            blog(LOG_INFO, "[input-event]{ time: %d, " format, recording_time, ##__VA_ARGS__); \
         } \
     } while (0)
 #define bwarn(format, ...) write_log(LOG_WARNING, format, ##__VA_ARGS__)

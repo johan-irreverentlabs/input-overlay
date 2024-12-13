@@ -20,6 +20,7 @@ input-overlay depends on [libuiohook](https://github.com/kwhat/libuiohook) by [k
 - Install Visual Studio 17 2022
 - Install CMake
 ``` 
+git submodule update --init
 cmake --preset windows-x64 
 cmake --build --preset windows-x64
 ```
