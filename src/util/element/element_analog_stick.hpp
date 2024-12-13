@@ -32,7 +32,8 @@ enum stick_data_type {
 
 class element_analog_stick : public element_texture {
 public:
-    element_analog_stick() : element_texture(ET_ANALOG_STICK), m_side() {}
+    element_analog_stick() : element_texture(ET_ANALOG_STICK), m_side() {
+    }
 
     void load(const QJsonObject &obj) override;
 

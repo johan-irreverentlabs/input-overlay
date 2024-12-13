@@ -21,6 +21,7 @@
 #include <keycodes.h>
 #include "SDL.h"
 #include "util/log.h"
+extern Logger logger;
 
 element_dpad::element_dpad() : element_texture(ET_DPAD_STICK) {}
 
@@ -87,7 +88,7 @@ void element_dpad::tick(float, sources::overlay_settings *settings)
     if (settings->gamepad)
         dir = get_direction(settings->get_button_map()); 
     if (m_last_dir != dir) {
-        binput_event("dpad: %d}", dir);
+        logger.logMessage("dpad", std::to_string(dir));
     }
     m_last_dir = dir;
 }

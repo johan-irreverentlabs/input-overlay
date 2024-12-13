@@ -46,6 +46,8 @@ OBS_MODULE_USE_DEFAULT_LOCALE("input-overlay", "en-US")
 
 int64_t g_record_start_time = -1;
 
+Logger logger;
+
 int recording_time_ms() {
     if (g_record_start_time == -1)
         return -1;
@@ -56,12 +58,14 @@ int recording_time_ms() {
 void on_recording_started(void*)
 {
     binfo("Recording started");
+    logger.startLogging("C:/capture_logs");
     g_record_start_time = os_gettime_ns();
 }
 
 void on_recording_stopped(void*)
 {
     binfo("Recording stopped");
+    logger.stopLogging();
     g_record_start_time = -1;
 }
 

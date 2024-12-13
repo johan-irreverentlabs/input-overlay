@@ -21,6 +21,7 @@
 #include "SDL.h"
 #include <keycodes.h>
 #include "util/log.h"
+extern Logger logger;
 
 void element_analog_stick::load(const QJsonObject &obj)
 {
@@ -77,11 +78,20 @@ void element_analog_stick::tick(float, sources::overlay_settings *settings)
     }
 
     if (x != m_last_x) {
-        binput_event("%s_stick_x: %d}", m_side == element_side::LEFT ? "left" : "right", x);
+        if (m_side == element_side::LEFT) {
+            logger.logMessage("left_stick_x", std::to_string(x));
+        } else {
+            logger.logMessage("right_stick_x", std::to_string(x));
+        }
     }
 
     if (y != m_last_y) {
-        binput_event("%s_stick_y: %d}", m_side == element_side::LEFT ? "left" : "right", y);
+        if (m_side == element_side::LEFT) {
+            logger.logMessage("left_stick_y", std::to_string(x));
+        } else {
+            logger.logMessage("right_stick_y", std::to_string(x));
+        }
+
     }
 
     m_last_x = x;
